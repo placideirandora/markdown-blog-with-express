@@ -10,6 +10,30 @@ articleRouter.get('/new', (req, res) => {
   return res.render('article/new', { article });
 });
 
+articleRouter.get('/edit/:id', async (req, res) => {
+  const article = await Article.findOne({ _id: req.params.id });
+
+  return res.render('article/edit', { article });
+});
+
+articleRouter.put('/edit/:id', async (req, res) => {
+  let article = await Article.findOne({ _id: req.params.id });
+
+  article.title = req.body.title;
+  article.image = req.body.image;
+  article.body = req.body.body;
+  article.markdown = req.body.markdown;
+  article.source = req.body.source;
+
+  try {
+    article.save();
+
+    return res.redirect(`/article/${article.slug}`);
+  } catch (error) {
+    return res.render('article/edit', { article });
+  }
+});
+
 articleRouter.get('/:slug', async (req, res) => {
   const article = await Article.findOne({ slug: req.params.slug });
 
@@ -32,8 +56,6 @@ articleRouter.post('/', async (req, res) => {
 
     return res.redirect(`/article/${storedArticle._id}`);
   } catch (error) {
-    console.log(error);
-
     return res.render('article/new', { article });
   }
 });
