@@ -47,7 +47,7 @@
                 <%= article.createdAt.toLocaleDateString('en-US', { weekday:
                 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
               </p>
-              <p class="card-text"><%= article.body %></p>
+              <p class="card-text"><%- article.sanitizedHTML %></p>
             </div>
           </div>
 
