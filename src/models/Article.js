@@ -1,5 +1,10 @@
+import marked from 'marked';
 import slugify from 'slugify';
 import mongoose from 'mongoose';
+import { JSDOM } from 'jsdom';
+import createDomPurifier from 'dompurify';
+
+const dompurify = createDomPurifier(new JSDOM().window);
 
 const ArticleSchema = new mongoose.Schema({
   slug: {
@@ -22,6 +27,10 @@ const ArticleSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  sanitizedHTML: {
+    type: String,
+    required: true,
+  },
   source: {
     type: String,
     required: true,
@@ -35,6 +44,10 @@ const ArticleSchema = new mongoose.Schema({
 ArticleSchema.pre('validate', function (next) {
   if (this.title) {
     this.slug = slugify(this.title, { lower: true, strict: true });
+  }
+
+  if (this.markdown) {
+    this.sanitizedHTML = dompurify.sanitize(marked(this.markdown));
   }
 
   next();
