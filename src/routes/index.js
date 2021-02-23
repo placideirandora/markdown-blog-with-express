@@ -1,12 +1,13 @@
 import { Router } from 'express';
 
 import articleRouter from './article';
+import Article from '../models/Article';
 
 const indexRouter = Router();
 
-const articles = [];
+indexRouter.get('/', async (req, res) => {
+  const articles = await Article.find().sort({ createdAt: 'desc' });
 
-indexRouter.get('/', (req, res) => {
   return res.render('article/index', { articles });
 });
 
