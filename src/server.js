@@ -2,6 +2,7 @@ import path from 'path';
 import express from 'express';
 import { config } from 'dotenv';
 import mongoose from 'mongoose';
+import methodOverride from 'method-override';
 
 import indexRouter from './routes';
 
@@ -12,6 +13,8 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: false }));
+app.use(methodOverride('_method'));
+app.use('/', indexRouter);
 
 // Database connection
 mongoose
@@ -26,8 +29,6 @@ mongoose
   .catch((err) => {
     console.error('Database Not Connected Due To: ', err);
   });
-
-app.use('/', indexRouter);
 
 const port = process.env.PORT || 3000;
 
