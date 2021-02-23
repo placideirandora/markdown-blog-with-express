@@ -10,8 +10,8 @@ articleRouter.get('/new', (req, res) => {
   return res.render('article/new', { article });
 });
 
-articleRouter.get('/:id', async (req, res) => {
-  const article = await Article.findOne({ _id: req.params.id });
+articleRouter.get('/:slug', async (req, res) => {
+  const article = await Article.findOne({ slug: req.params.slug });
 
   if (!article) return res.redirect('/');
 
