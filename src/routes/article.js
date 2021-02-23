@@ -24,7 +24,7 @@ articleRouter.post('/', async (req, res) => {
     image: req.body.image,
     body: req.body.body,
     markdown: req.body.markdown,
-    source: req.body.source
+    source: req.body.source,
   });
 
   try {
@@ -36,6 +36,12 @@ articleRouter.post('/', async (req, res) => {
 
     return res.render('article/new', { article });
   }
+});
+
+articleRouter.delete('/:id', async (req, res) => {
+  await Article.findOneAndDelete({ _id: req.params.id });
+
+  return res.redirect('/');
 });
 
 export default articleRouter;
